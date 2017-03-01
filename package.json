@@ -1,6 +1,12 @@
 {
-  "name": "test-now",
-  "version": "0.1.0",
+  "name": "badge-provider",
+  "description": "Badge provider for brackets extensions",
+  "version": "1.0.0",
+  "author": {
+    "name": "Boris Kubiak",
+    "email": "kubiakboris@gmail.com",
+    "url": "https://github.com/bokub"
+  },
   "dependencies": {
     "@types/compression": "0.0.33",
     "@types/cors": "^2.8.0",
@@ -14,11 +20,20 @@
     "dateformat": "^2.0.0",
     "express": "^4.14.1",
     "finalhandler": "^1.0.0",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.5",
     "lokijs": "^1.4.3",
     "router": "^1.3.0",
     "typescript": "^2.2.1"
   },
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brackets-extension-badges/badge-provider-nodejs"
+  },
   "scripts": {
+    "build": "gulp",
     "start": "node index"
   }
 }
