@@ -14,6 +14,5 @@ export class App {
         this.server = new WebServer(port, this.db);
         this.server.start();
         this.updater.updateData();
-        require("dot").process({ path: "./views"});
     }
 }
