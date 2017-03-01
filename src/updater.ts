@@ -15,7 +15,7 @@ export class Updater {
         this.weekDays = [];
     }
 
-    dataUpdate() {
+    public updateData() {
         let self = this;
         this.getNewData(function (results: any) {
 
@@ -33,7 +33,7 @@ export class Updater {
         });
     }
 
-    getNewData(callback: any) {
+    private getNewData(callback: any) {
         let options = {
             hostname: host,
             port: 443,

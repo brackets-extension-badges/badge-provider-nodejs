@@ -1,3 +1,3 @@
-var Server = require("./js/server");
-var server = new Server.WebServer(80);
-server.start();
+var App = require("./js/app");
+var app = new App.App();
+app.start(81);

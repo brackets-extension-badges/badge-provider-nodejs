@@ -11,14 +11,13 @@ export class Database {
     private db: Loki;
     private extensions: LokiCollection<any>;
 
-
     constructor() {
         this.db = new Loki('extensions.db');
         this.extensions = this.db.addCollection('extensions');
         console.log('Database created');
     }
 
-    upsert(e: Extension): void {
+    public upsert(e: Extension): void {
         let n = this.extensions.findOne({'name': e.name});
 
         if (n === null) {
@@ -39,7 +38,7 @@ export class Database {
         this.extensions.update(n);
     }
 
-    get(name: string): Extension {
+    public get(name: string): Extension {
         return this.extensions.findOne({'name': name});
     }
 }
