@@ -14,5 +14,16 @@ export class App {
         this.server = new WebServer(port, this.db);
         this.server.start();
         this.updater.updateData();
+        this.cron();
     }
+
+    private cron(){
+        let cron = require('node-cron');
+        let self = this;
+        cron.schedule('* */6 * * *', function(){
+            self.updater.updateData();
+        });
+    }
+
+
 }
