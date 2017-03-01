@@ -23,7 +23,7 @@ export class WebServer {
 
         app.param('extension', function (req: any, res: any, next: any, extensionName: string) {
             let e = self.db.get(extensionName);
-            if (e === null) {
+            if (e == null) {
                 return View.unknownBadge(res);
             }
             req.extension = e;

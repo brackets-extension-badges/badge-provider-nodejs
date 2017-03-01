@@ -13,14 +13,16 @@ export class Database {
 
     constructor() {
         this.db = new Loki('extensions.db');
-        this.extensions = this.db.addCollection('extensions');
+        this.extensions = this.db.addCollection('extensions', {
+            unique: ['name']
+        });
         console.log('Database created');
     }
 
     public upsert(e: Extension): void {
-        let n = this.extensions.findOne({'name': e.name});
+        let n = this.extensions.by('name', e.name);
 
-        if (n === null) {
+        if (n == null) {
             // Insert
             this.extensions.insert({
                 name: e.name,
@@ -39,6 +41,6 @@ export class Database {
     }
 
     public get(name: string): Extension {
-        return this.extensions.findOne({'name': name});
+        return this.extensions.by('name', name);
     }
 }
