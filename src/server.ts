@@ -20,6 +20,15 @@ export class WebServer {
         app.use(compression());
         app.use(cors());
 
+        app.use(function (req: any, res: any, next: any) {
+            if (req.url === '/' && typeof req.headers.referer != 'undefined') {
+                let parse = require('url-parse');
+                let url = parse(req.headers.referer, true);
+                req.url = url.pathname;
+            }
+            next();
+        });
+
         app.param('extension', function (req: any, res: any, next: any, extensionName: string) {
             let e = self.db.get(extensionName);
             if (e == null) {
