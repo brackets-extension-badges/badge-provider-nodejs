@@ -1,6 +1,6 @@
 import {Database} from './database';
-import {Updater} from './updater';
 import {WebServer} from './server';
+import {Updater} from './updater';
 
 // noinspection JSUnusedGlobalSymbols
 export class App {
@@ -17,10 +17,10 @@ export class App {
         this.cron();
     }
 
-    private cron(){
+    private cron() {
         let cron = require('node-cron');
         let self = this;
-        cron.schedule('0 */6 * * *', function(){
+        cron.schedule('0 */6 * * *', function () {
             self.updater.updateData();
         });
     }

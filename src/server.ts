@@ -1,9 +1,9 @@
 import compression = require('compression');
 import cors = require('cors');
 import express = require('express');
-import {Database} from "./database";
-import {View} from "./view";
-import {BadgeUtils} from "./badgeUtils";
+import {BadgeUtils} from './badgeUtils';
+import {Database} from './database';
+import {View} from './view';
 
 export class WebServer {
     private port: number;
@@ -14,14 +14,14 @@ export class WebServer {
         this.db = db;
     }
 
-    start() {
+    public start() {
         let self = this;
         let app = express();
         app.use(compression());
         app.use(cors());
 
         app.use(function (req: any, res: any, next: any) {
-            if (req.url === '/' && typeof req.headers.referer != 'undefined') {
+            if (req.url === '/' && typeof req.headers.referer !== 'undefined') {
                 let parse = require('url-parse');
                 let url = parse(req.headers.referer, true);
                 req.url = url.pathname;
@@ -49,10 +49,10 @@ export class WebServer {
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             let e = req.extension;
             res.end(JSON.stringify({
-                'name': e.name,
-                'total': e.totalDownloads,
-                'lastVersion': e.lastVersionDownloads,
-                'week': e.weekDownloads
+                lastVersion: e.lastVersionDownloads,
+                name: e.name,
+                total: e.totalDownloads,
+                week: e.weekDownloads,
             }));
         });
 
@@ -71,7 +71,7 @@ export class WebServer {
         });
 
         app.listen(this.port, function () {
-            console.log('Server listening on port ' + self.port + '!')
+            console.info('Server listening on port ' + self.port + '!');
         });
     }
 }

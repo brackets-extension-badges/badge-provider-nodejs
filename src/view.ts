@@ -1,11 +1,11 @@
-import path = require('path')
-import {BadgeUtils, _downloadsWidth} from "./badgeUtils";
+import path = require('path');
+import {BadgeUtils, DOWNLOADS_WIDTH} from './badgeUtils';
 
 export class View {
     public static getBadge(downloads: number, method: string): string {
         let text = BadgeUtils.formatNumber(downloads);
 
-        let leftWidth = _downloadsWidth + 10;
+        let leftWidth = DOWNLOADS_WIDTH + 10;
         let rightWidth = BadgeUtils.measureTextWidth(text) + 10 + BadgeUtils.getSuffixWidth(method);
 
         text += BadgeUtils.getSuffix(method);
@@ -23,5 +23,4 @@ export class View {
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         res.end(list);
     }
-
 }

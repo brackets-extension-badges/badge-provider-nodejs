@@ -9,14 +9,14 @@ export interface Extension {
 
 export class Database {
     private db: Loki;
-    public extensions: LokiCollection<any>;
+    private extensions: LokiCollection<any>;
 
     constructor() {
         this.db = new Loki('extensions.db');
         this.extensions = this.db.addCollection('extensions', {
-            unique: ['name']
+            unique: ['name'],
         });
-        console.log('Database created');
+        console.info('Database created');
     }
 
     public upsert(e: Extension): void {
@@ -25,10 +25,10 @@ export class Database {
         if (n == null) {
             // Insert
             this.extensions.insert({
+                lastVersionDownloads: e.lastVersionDownloads,
                 name: e.name,
                 totalDownloads: e.totalDownloads,
                 weekDownloads: e.weekDownloads,
-                lastVersionDownloads: e.lastVersionDownloads,
             });
             return;
         }
@@ -45,13 +45,17 @@ export class Database {
     }
 
     public getExtensionList(): string {
-        return this.extensions.by('name', 'EXTENSION LIST', ).list;
+        let l = this.extensions.by('name', 'EXTENSION LIST');
+        if (l == null) {
+            return '{}';
+        }
+        return this.extensions.by('name', 'EXTENSION LIST').list;
     }
 
     public saveExtensionList(list: string): string {
         let n = this.extensions.by('name', 'EXTENSION LIST');
         if (n == null) {
-            this.extensions.insert({ name: 'EXTENSION LIST', list: list});
+            this.extensions.insert({list, name: 'EXTENSION LIST'});
             return;
         }
 
