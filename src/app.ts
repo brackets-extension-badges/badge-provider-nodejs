@@ -1,6 +1,6 @@
-import {Database} from "./database";
-import {Updater} from "./updater";
-import {WebServer} from "./server";
+import {Database} from './database';
+import {Updater} from './updater';
+import {WebServer} from './server';
 
 // noinspection JSUnusedGlobalSymbols
 export class App {
@@ -24,6 +24,4 @@ export class App {
             self.updater.updateData();
         });
     }
-
-
 }
