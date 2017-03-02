@@ -1,5 +1,4 @@
 import compression = require('compression');
-import cors = require('cors');
 import express = require('express');
 import {BadgeUtils} from './badgeUtils';
 import {Database} from './database';
@@ -18,7 +17,12 @@ export class WebServer {
         let self = this;
         let app = express();
         app.use(compression());
-        app.use(cors());
+
+        app.use(function(req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+        });
 
         app.use(function (req: any, res: any, next: any) {
             if (req.url === '/' && typeof req.headers.referer !== 'undefined') {
