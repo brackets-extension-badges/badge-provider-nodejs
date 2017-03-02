@@ -20,7 +20,7 @@ export class App {
     private cron(){
         let cron = require('node-cron');
         let self = this;
-        cron.schedule('* */6 * * *', function(){
+        cron.schedule('0 */6 * * *', function(){
             self.updater.updateData();
         });
     }

@@ -9,7 +9,7 @@ export interface Extension {
 
 export class Database {
     private db: Loki;
-    private extensions: LokiCollection<any>;
+    public extensions: LokiCollection<any>;
 
     constructor() {
         this.db = new Loki('extensions.db');
@@ -42,5 +42,20 @@ export class Database {
 
     public get(name: string): Extension {
         return this.extensions.by('name', name);
+    }
+
+    public getExtensionList(): string {
+        return this.extensions.by('name', 'EXTENSION LIST', ).list;
+    }
+
+    public saveExtensionList(list: string): string {
+        let n = this.extensions.by('name', 'EXTENSION LIST');
+        if (n == null) {
+            this.extensions.insert({ name: 'EXTENSION LIST', list: list});
+            return;
+        }
+
+        n.list = list;
+        this.extensions.update(n);
     }
 }

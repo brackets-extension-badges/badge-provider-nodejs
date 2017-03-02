@@ -1,6 +1,7 @@
 import http = require('http');
 import https = require('https');
 import dateFormat = require('dateformat');
+import fs = require('fs');
 import {Database, Extension} from "./database";
 
 const host = 'brackets-registry.aboutweb.com';
@@ -17,18 +18,22 @@ export class Updater {
 
     public updateData() {
         let self = this;
-        this.getNewData(function (results: any) {
+        let list: {[key: string]: number} = {};
+        self.weekDays = Updater.getWeekDays();
 
+        this.getNewData(function (results: any) {
             results = results.registry;
-            self.weekDays = Updater.getWeekDays();
 
             for (let i in results) {
                 let extension;
                 if (results.hasOwnProperty(i)) {
                     extension = self.hydrate(results[i]);
                     self.db.upsert(extension);
+                    list[extension.name] = extension.totalDownloads;
                 }
             }
+
+            self.db.saveExtensionList(JSON.stringify(list));
             console.log('Data updated :  ' + results.length + ' rows');
         });
     }

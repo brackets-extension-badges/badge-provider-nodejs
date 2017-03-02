@@ -1,5 +1,5 @@
 import numeral = require('numeral');
-import Handlebars = require('handlebars');
+import {Extension} from "./database";
 
 export const _total = 'total';
 export const _lastVersion = 'last-version';
@@ -48,7 +48,7 @@ export class BadgeUtils {
     }
 
     public static formatNumber(number: number): string {
-        let formatted;
+        let formatted: string;
         if (number < 10000) {
             formatted = numeral(number).format('0');
         } else if (number < 10000000) {
@@ -86,6 +86,28 @@ export class BadgeUtils {
                 return _dayWidth;
         }
         return null;
+    }
+
+    public static getDownloadsByMethod(e: Extension, method: string): number{
+        let downloads: number;
+        switch (method) {
+            case _total:
+                downloads = e.totalDownloads;
+                break;
+            case _lastVersion:
+                downloads = e.lastVersionDownloads;
+                break;
+            case _week:
+                downloads = e.weekDownloads;
+                break;
+            case _day:
+                downloads = e.weekDownloads / 7;
+                break;
+            default:
+                downloads = 0;
+        }
+
+        return downloads;
     }
 }
 

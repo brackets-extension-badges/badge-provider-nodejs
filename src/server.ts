@@ -1,10 +1,9 @@
 import compression = require('compression');
 import cors = require('cors');
 import express = require('express');
-import Handlebars = require('handlebars');
 import {Database} from "./database";
 import {View} from "./view";
-import {_total, _lastVersion, _week, _day} from "./badgeUtils";
+import {BadgeUtils} from "./badgeUtils";
 
 export class WebServer {
     private port: number;
@@ -32,31 +31,11 @@ export class WebServer {
 
         app.get('/:extension/:method(total|last-version|week|day).svg', function (req: any, res: any) {
             res.setHeader('Content-Type', 'image/svg+xml');
-            // res.setHeader('Content-Type', 'text/plain; charset=utf-8');
             let method = req.params['method'];
-            let e = req.extension;
-            let downloads;
-
-            switch (method) {
-                case _total:
-                    downloads = e.totalDownloads;
-                    break;
-                case _lastVersion:
-                    downloads = e.lastVersionDownloads;
-                    break;
-                case _week:
-                    downloads = e.weekDownloads;
-                    break;
-                case _day:
-                    downloads = e.weekDownloads / 7;
-                    break;
-                default:
-                    downloads = 0;
-            }
+            let downloads = BadgeUtils.getDownloadsByMethod(req.extension, method);
             res.end(View.getBadge(downloads, method));
         });
 
-        // stats.json route
         app.get('/:extension/stats.json', function (req: any, res: any) {
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             let e = req.extension;
@@ -69,8 +48,12 @@ export class WebServer {
         });
 
         app.get('/*.svg', function (req: any, res: any) {
-            res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-            res.end('Nope');
+            return View.unknownBadge(res);
+        });
+
+        app.get('/list.json', function (req: any, res: any) {
+            let list = self.db.getExtensionList();
+            View.extensionList(res, list);
         });
 
         app.get('/', function (req: any, res: any) {
