@@ -1,5 +1,9 @@
 import compression = require('compression');
+import fs = require('fs');
 import express = require('express');
+import http = require('http');
+import https = require('https');
+import path = require('path');
 import {BadgeUtils} from './badgeUtils';
 import {Database} from './database';
 import {View} from './view';
@@ -7,6 +11,7 @@ import {View} from './view';
 export class WebServer {
     private port: number;
     private db: Database;
+    private app: any;
 
     constructor(port: number, db: Database) {
         this.port = port;
@@ -14,42 +19,25 @@ export class WebServer {
     }
 
     public start() {
+        this.app = express();
+
+        this.useMiddleware();
+        this.decodeParams();
+        this.route();
+        this.startServer();
+    }
+
+    private route(): void {
         let self = this;
-        let app = express();
-        app.use(compression());
 
-        app.use(function(req, res, next) {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next();
-        });
-
-        app.use(function (req: any, res: any, next: any) {
-            if (req.url === '/' && typeof req.headers.referer !== 'undefined') {
-                let parse = require('url-parse');
-                let url = parse(req.headers.referer, true);
-                req.url = url.pathname;
-            }
-            next();
-        });
-
-        app.param('extension', function (req: any, res: any, next: any, extensionName: string) {
-            let e = self.db.get(extensionName);
-            if (e == null) {
-                return View.unknownBadge(res);
-            }
-            req.extension = e;
-            next();
-        });
-
-        app.get('/:extension/:method(total|last-version|week|day).svg', function (req: any, res: any) {
+        this.app.get('/:extension/:method(total|last-version|week|day).svg', function (req: any, res: any) {
             res.setHeader('Content-Type', 'image/svg+xml');
             let method = req.params['method'];
             let downloads = BadgeUtils.getDownloadsByMethod(req.extension, method);
             res.end(View.getBadge(downloads, method));
         });
 
-        app.get('/:extension/stats.json', function (req: any, res: any) {
+        this.app.get('/:extension/stats.json', function (req: any, res: any) {
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             let e = req.extension;
             res.end(JSON.stringify({
@@ -60,22 +48,60 @@ export class WebServer {
             }));
         });
 
-        app.get('/*.svg', function (req: any, res: any) {
+        this.app.get('/*.svg', function (req: any, res: any) {
             return View.unknownBadge(res);
         });
 
-        app.get('/list.json', function (req: any, res: any) {
+        this.app.get('/list.json', function (req: any, res: any) {
             let list = self.db.getExtensionList();
             View.extensionList(res, list);
         });
 
-        app.get('/', function (req: any, res: any) {
+        this.app.get('/', function (req: any, res: any) {
             res.setHeader('Content-Type', 'text/plain; charset=utf-8');
             res.end('Hello World!');
         });
+    }
 
-        app.listen(this.port, function () {
-            console.info('Server listening on port ' + self.port + '!');
+    private useMiddleware(): void {
+        this.app.use(compression());
+
+        this.app.use(function(req: any, res: any, next: any) {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+            next();
         });
+    }
+
+    private decodeParams(): void {
+        let self = this;
+
+        this.app.param('extension', function (req: any, res: any, next: any, extensionName: string) {
+            let e = self.db.get(extensionName);
+            if (e == null) {
+                return View.unknownBadge(res);
+            }
+            req.extension = e;
+            next();
+        });
+    }
+
+    private startServer(): void {
+        if (!fs.existsSync(path.join(__dirname, '../cert', 'chain.pem'))
+            || !fs.existsSync(path.join(__dirname, '../cert', 'fullchain.pem'))
+            || !fs.existsSync(path.join(__dirname, '../cert', 'privkey.pem'))
+           ) {
+            http.createServer(this.app).listen(this.port);
+        } else {
+            let options = {
+                ca: fs.readFileSync(path.join(__dirname, '../cert', 'chain.pem')),
+                cert: fs.readFileSync(path.join(__dirname, '../cert', 'fullchain.pem')),
+                key: fs.readFileSync(path.join(__dirname, '../cert', 'privkey.pem')),
+            };
+            https.createServer(options, this.app).listen(this.port);
+            console.info('HTTPS enabled');
+        }
+
+        console.info('Server listening on port ' + this.port + '!');
     }
 }

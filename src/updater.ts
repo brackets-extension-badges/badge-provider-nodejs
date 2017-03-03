@@ -95,7 +95,7 @@ export class Updater {
     private getWeekDownloads(recent: any) {
         let count = 0;
         for (let i of this.weekDays) {
-            if (typeof recent[i] !== 'undefined') {
+            if (typeof recent !== 'undefined' && typeof recent[i] !== 'undefined') {
                 count += recent[i];
             }
         }
