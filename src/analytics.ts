@@ -17,7 +17,7 @@ export class Analytics {
             return;
         }
 
-        this.tid = fs.readFileSync(path.join(__dirname, '../analytics', 'tid'), 'utf8');
+        this.tid = fs.readFileSync(path.join(__dirname, '../analytics', 'tid'), 'utf8').replace(/\s/g, '');
         this.activated = true;
         console.info('Analytics activated with tid = ' + this.tid);
     }
