@@ -9,12 +9,12 @@ import {Database} from './database';
 import {View} from './view';
 
 export class WebServer {
-    private port: number;
+    private ports: {[key: string]: number};
     private db: Database;
     private app: any;
 
-    constructor(port: number, db: Database) {
-        this.port = port;
+    constructor(ports: {[key: string]: number}, db: Database) {
+        this.ports = ports;
         this.db = db;
     }
 
@@ -66,7 +66,7 @@ export class WebServer {
     private useMiddleware(): void {
         this.app.use(compression());
 
-        this.app.use(function(req: any, res: any, next: any) {
+        this.app.use(function (req: any, res: any, next: any) {
             res.header('Access-Control-Allow-Origin', '*');
             res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
             next();
@@ -87,21 +87,20 @@ export class WebServer {
     }
 
     private startServer(): void {
-        if (!fs.existsSync(path.join(__dirname, '../cert', 'chain.pem'))
-            || !fs.existsSync(path.join(__dirname, '../cert', 'fullchain.pem'))
-            || !fs.existsSync(path.join(__dirname, '../cert', 'privkey.pem'))
-           ) {
-            http.createServer(this.app).listen(this.port);
-        } else {
+        if (fs.existsSync(path.join(__dirname, '../cert', 'chain.pem'))
+            && fs.existsSync(path.join(__dirname, '../cert', 'fullchain.pem'))
+            && fs.existsSync(path.join(__dirname, '../cert', 'privkey.pem'))
+        ) {
             let options = {
                 ca: fs.readFileSync(path.join(__dirname, '../cert', 'chain.pem')),
                 cert: fs.readFileSync(path.join(__dirname, '../cert', 'fullchain.pem')),
                 key: fs.readFileSync(path.join(__dirname, '../cert', 'privkey.pem')),
             };
-            https.createServer(options, this.app).listen(this.port);
-            console.info('HTTPS enabled');
+            https.createServer(options, this.app).listen(this.ports.https);
+            console.info('Server listening on port ' + this.ports.https + '!');
         }
 
-        console.info('Server listening on port ' + this.port + '!');
+        http.createServer(this.app).listen(this.ports.http);
+        console.info('Server listening on port ' + this.ports.http + '!');
     }
 }

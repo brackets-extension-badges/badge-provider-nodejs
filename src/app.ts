@@ -8,10 +8,10 @@ export class App {
     private updater: Updater;
     private server: WebServer;
 
-    public start(port: number) {
+    public start(ports: {[key: string]: number}) {
         this.db = new Database();
         this.updater = new Updater(this.db);
-        this.server = new WebServer(port, this.db);
+        this.server = new WebServer(ports, this.db);
         this.server.start();
         this.updater.updateData();
         this.cron();
