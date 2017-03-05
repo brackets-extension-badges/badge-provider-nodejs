@@ -4,18 +4,21 @@ import express = require('express');
 import http = require('http');
 import https = require('https');
 import path = require('path');
+import {Analytics} from './analytics';
 import {BadgeUtils} from './badgeUtils';
 import {Database} from './database';
 import {View} from './view';
 
 export class WebServer {
-    private ports: {[key: string]: number};
-    private db: Database;
+    private analytics: Analytics;
     private app: any;
+    private db: Database;
+    private ports: {[key: string]: number};
 
-    constructor(ports: {[key: string]: number}, db: Database) {
-        this.ports = ports;
+    constructor(ports: {[key: string]: number}, db: Database, analytics: Analytics) {
+        this.analytics = analytics;
         this.db = db;
+        this.ports = ports;
     }
 
     public start() {
@@ -35,6 +38,7 @@ export class WebServer {
             let method = req.params['method'];
             let downloads = BadgeUtils.getDownloadsByMethod(req.extension, method);
             res.end(View.getBadge(downloads, method));
+            self.analytics.track(req, method);
         });
 
         this.app.get('/:extension/stats.json', function (req: any, res: any) {
@@ -46,20 +50,24 @@ export class WebServer {
                 total: e.totalDownloads,
                 week: e.weekDownloads,
             }));
+            self.analytics.track(req, 'stats');
         });
 
         this.app.get('/*.svg', function (req: any, res: any) {
-            return View.unknownBadge(res);
+            View.unknownBadge(res);
+            self.analytics.track(req);
         });
 
         this.app.get('/list.json', function (req: any, res: any) {
             let list = self.db.getExtensionList();
             View.extensionList(res, list);
+            self.analytics.track(req);
         });
 
         this.app.get('/', function (req: any, res: any) {
             res.setHeader('Content-Type', 'text/plain; charset=utf-8');
             res.end('Hello World!');
+            self.analytics.track(req);
         });
     }
 
