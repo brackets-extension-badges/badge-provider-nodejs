@@ -45,10 +45,12 @@ export class WebServer {
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             let e = req.extension;
             res.end(JSON.stringify({
-                lastVersion: e.lastVersionDownloads,
+                /* tslint:disable */
                 name: e.name,
                 total: e.totalDownloads,
+                lastVersion: e.lastVersionDownloads,
                 week: e.weekDownloads,
+                /* tslint:enable */
             }));
             self.analytics.track(req, 'stats');
         });

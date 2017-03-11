@@ -83,7 +83,8 @@ export class Updater {
         };
         e.totalDownloads = result.totalDownloads;
 
-        if (typeof result.versions !== 'undefined') {
+        if (typeof result.versions !== 'undefined' &&
+            result.versions[result.versions.length - 1].hasOwnProperty('downloads')) {
             e.lastVersionDownloads = result.versions[result.versions.length - 1].downloads;
         }
 
