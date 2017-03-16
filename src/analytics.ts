@@ -47,6 +47,10 @@ export class Analytics {
             url: 'https://www.google-analytics.com/collect',
         };
 
-        request.post(options);
+        request.post(options, function (error, response, body) {
+            if (error != null) {
+                console.error('HTTPS Post error: ' + error);
+            }
+        });
     }
 }

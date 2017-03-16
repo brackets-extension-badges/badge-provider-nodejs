@@ -70,7 +70,7 @@ export class Updater {
         req.end();
 
         req.on('error', (e) => {
-            console.error(e);
+            console.error('HTTPS Get error: ' + e);
         });
     }
 
