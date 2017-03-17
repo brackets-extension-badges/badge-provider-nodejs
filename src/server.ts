@@ -13,12 +13,12 @@ export class WebServer {
     private analytics: Analytics;
     private app: any;
     private db: Database;
-    private ports: {[key: string]: number};
+    private options: {[key: string]: any[]};
 
-    constructor(ports: {[key: string]: number}, db: Database, analytics: Analytics) {
+    constructor(options: {[key: string]: any[]}, db: Database, analytics: Analytics) {
         this.analytics = analytics;
         this.db = db;
-        this.ports = ports;
+        this.options = options;
     }
 
     public start() {
@@ -106,11 +106,19 @@ export class WebServer {
                 cert: fs.readFileSync(path.join(__dirname, '../cert', 'fullchain.pem')),
                 key: fs.readFileSync(path.join(__dirname, '../cert', 'privkey.pem')),
             };
-            https.createServer(options, this.app).listen(this.ports.https);
-            console.info('Server listening on port ' + this.ports.https + '!');
+            if (this.options.https.length === 1) {
+                https.createServer(options, this.app).listen(this.options.https[0]);
+            } else {
+                https.createServer(options, this.app).listen(this.options.https[0], this.options.https[1]);
+            }
+            console.info('Server listening on port ' + this.options.https[0] + '!');
         }
 
-        http.createServer(this.app).listen(this.ports.http);
-        console.info('Server listening on port ' + this.ports.http + '!');
+        if (this.options.http.length === 1) {
+            http.createServer(this.app).listen(this.options.http[0]);
+        } else {
+            http.createServer(this.app).listen(this.options.http[0], this.options.http[1]);
+        }
+        console.info('Server listening on port ' + this.options.http[0] + '!');
     }
 }
