@@ -106,19 +106,11 @@ export class WebServer {
                 cert: fs.readFileSync(path.join(__dirname, '../cert', 'fullchain.pem')),
                 key: fs.readFileSync(path.join(__dirname, '../cert', 'privkey.pem')),
             };
-            if (this.options.https.length === 1) {
-                https.createServer(options, this.app).listen(this.options.https[0]);
-            } else {
-                https.createServer(options, this.app).listen(this.options.https[0], this.options.https[1]);
-            }
+            https.createServer(options, this.app).listen(this.options.https[0], this.options.https[1]);
             console.info('Server listening on port ' + this.options.https[0] + '!');
         }
 
-        if (this.options.http.length === 1) {
-            http.createServer(this.app).listen(this.options.http[0]);
-        } else {
-            http.createServer(this.app).listen(this.options.http[0], this.options.http[1]);
-        }
+        http.createServer(this.app).listen(this.options.http[0], this.options.http[1]);
         console.info('Server listening on port ' + this.options.http[0] + '!');
     }
 }
