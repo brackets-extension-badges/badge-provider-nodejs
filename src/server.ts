@@ -67,8 +67,8 @@ export class WebServer {
         });
 
         this.app.get('/', function (req: any, res: any) {
-            res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-            res.end('Hello World!');
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.end('<script>window.location.replace(\'https://brackets-extension-badges.github.io\');</script>');
             self.analytics.track(req);
         });
     }
