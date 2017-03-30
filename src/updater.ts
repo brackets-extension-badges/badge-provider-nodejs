@@ -7,6 +7,9 @@ import {Database, Extension} from './database';
 const host = 'brackets-registry.aboutweb.com';
 const path = '/registryList';
 
+/**
+ * Everything about fetching data
+ */
 export class Updater {
     private db: Database;
     private weekDays: string[];
@@ -16,6 +19,9 @@ export class Updater {
         this.weekDays = [];
     }
 
+    /**
+     * Fetch the data from the registry, then save it in database
+     */
     public updateData() {
         let self = this;
         let list: {[key: string]: number} = {};
@@ -29,6 +35,7 @@ export class Updater {
                     let extension;
                     if (results.hasOwnProperty(i)) {
                         extension = self.hydrate(results[i]);
+                        // Upsert in DB
                         self.db.upsert(extension);
                         list[extension.name] = extension.totalDownloads;
                     }
@@ -39,6 +46,10 @@ export class Updater {
         });
     }
 
+    /**
+     * Fetch data from the registry
+     * @param callback
+     */
     private getNewData(callback: any) {
         let options = {
             headers: {
@@ -74,6 +85,11 @@ export class Updater {
         });
     }
 
+    /**
+     * Cast a result (undefined type) into an Extension
+     * @param result
+     * @returns {{lastVersionDownloads: number, name, totalDownloads: number, weekDownloads: number}}
+     */
     private hydrate(result: any): Extension {
         let e = {
             lastVersionDownloads: 0,
@@ -93,6 +109,11 @@ export class Updater {
         return e;
     }
 
+    /**
+     * Compute downloads of the week
+     * @param recent
+     * @returns {number}
+     */
     private getWeekDownloads(recent: any) {
         let count = 0;
         for (let i of this.weekDays) {
@@ -104,6 +125,10 @@ export class Updater {
     }
 }
 
+/**
+ * Create an array of the last 7 days formatted as YYYYMMDD
+ * @returns {Array}
+ */
 function getWeekDays() {
     let day = new Date();
     let weekDays = [];

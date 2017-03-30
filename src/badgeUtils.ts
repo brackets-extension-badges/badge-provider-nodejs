@@ -32,7 +32,16 @@ const CHAR_WIDTHS = {
     9: 6.9931640625,
 } as any;
 
+/**
+ * Tools and utils for badge generation
+ */
 export class BadgeUtils {
+
+    /**
+     * Measure the width of a text
+     * @param text
+     * @returns {number}
+     */
     public static measureTextWidth(text: string): number {
 
         let chars = text.split('');
@@ -47,6 +56,11 @@ export class BadgeUtils {
         return width;
     }
 
+    /**
+     * Format a number nicely for display
+     * @param unFormatted
+     * @returns {string}
+     */
     public static formatNumber(unFormatted: number): string {
         let formatted: string;
         if (unFormatted < 10000) {
@@ -60,7 +74,12 @@ export class BadgeUtils {
         return formatted;
     }
 
-    public static getSuffix(method: string) {
+    /**
+     * Get the end of the badge text depending on the requested statistic
+     * @param method
+     * @returns {string}
+     */
+    public static getSuffix(method: string): string {
         switch (method) {
             case TOTAL:
                 return TOTAL_SUFFIX;
@@ -71,11 +90,16 @@ export class BadgeUtils {
             case DAY:
                 return DAY_SUFFIX;
             default:
-                return null;
+                return '';
         }
     }
 
-    public static getSuffixWidth(method: string) {
+    /**
+     * Get the width of a suffix
+     * @param method
+     * @returns {number}
+     */
+    public static getSuffixWidth(method: string): number {
         switch (method) {
             case TOTAL:
                 return TOTAL_WIDTH;
@@ -86,10 +110,16 @@ export class BadgeUtils {
             case DAY:
                 return DAY_WIDTH;
             default:
-                return null;
+                return 0;
         }
     }
 
+    /**
+     * Count the downloads depending on the requested statistic
+     * @param e
+     * @param method
+     * @returns {number}
+     */
     public static getDownloadsByMethod(e: Extension, method: string): number {
         let downloads: number;
         switch (method) {

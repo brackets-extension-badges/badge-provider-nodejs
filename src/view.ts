@@ -1,7 +1,17 @@
 import path = require('path');
 import {BadgeUtils, DOWNLOADS_WIDTH} from './badgeUtils';
 
+/**
+ * Things to return at web requests
+ */
 export class View {
+
+    /**
+     * Get a .svg badge
+     * @param downloads - number to display
+     * @param method
+     * @returns {any}
+     */
     public static getBadge(downloads: number, method: string): string {
         let text = BadgeUtils.formatNumber(downloads);
 
@@ -14,11 +24,20 @@ export class View {
         return render({leftWidth, rightWidth, text});
     }
 
+    /**
+     * Get the badge version of a "404 - not found"
+     * @param res
+     */
     public static unknownBadge(res: any): void {
         res.setHeader('Content-Type', 'image/svg+xml');
         res.sendFile(path.join(__dirname, '../views', 'unknown.svg'));
     }
 
+    /**
+     * Get all the extensions with total downloads as a json.
+     * @param res
+     * @param list
+     */
     public static extensionList(res: any, list: string): void {
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         res.end(list);

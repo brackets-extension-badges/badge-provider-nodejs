@@ -7,6 +7,9 @@ export interface Extension {
     weekDownloads: number;
 }
 
+/**
+ * Database management
+ */
 export class Database {
     private db: Loki;
     private extensions: LokiCollection<any>;
@@ -19,6 +22,10 @@ export class Database {
         console.info('Database created');
     }
 
+    /**
+     * Upsert an extension, i.e update or insert
+     * @param e
+     */
     public upsert(e: Extension): void {
         let n = this.extensions.by('name', e.name);
 
@@ -40,6 +47,11 @@ export class Database {
         this.extensions.update(n);
     }
 
+    /**
+     * Get an extension by name
+     * @param name
+     * @returns {any|((value:any)=>any)}
+     */
     public get(name: string): Extension {
         return this.extensions.by('name', name);
     }

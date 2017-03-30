@@ -3,12 +3,18 @@ import path = require('path');
 import request = require('request');
 import uuid = require('uuid');
 
+/**
+ * Google Analytics
+ */
 export class Analytics {
 
     private activated: boolean;
     private uuid: string;
     private tid: string;
 
+    /**
+     * When starting, get GA tracking id and generate a new UUID
+     */
     constructor() {
         this.uuid = uuid.v4();
 
@@ -22,6 +28,11 @@ export class Analytics {
         console.info('Analytics activated with tid = ' + this.tid);
     }
 
+    /**
+     * Send a 'page view' event.
+     * @param req
+     * @param method
+     */
     public track(req: any, method: string = null): void {
         if (!this.activated) {
             return;

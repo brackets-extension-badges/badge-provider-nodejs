@@ -9,6 +9,9 @@ import {BadgeUtils} from './badgeUtils';
 import {Database} from './database';
 import {View} from './view';
 
+/**
+ * Web server management
+ */
 export class WebServer {
     private analytics: Analytics;
     private app: any;
@@ -21,6 +24,9 @@ export class WebServer {
         this.options = options;
     }
 
+    /**
+     * Create the web server and start it
+     */
     public start() {
         this.app = express();
 
@@ -30,6 +36,9 @@ export class WebServer {
         this.startServer();
     }
 
+    /**
+     * Define the server routes
+     */
     private route(): void {
         let self = this;
 
@@ -73,6 +82,9 @@ export class WebServer {
         });
     }
 
+    /**
+     * Define the server middleware
+     */
     private useMiddleware(): void {
         this.app.use(compression());
 
@@ -83,6 +95,9 @@ export class WebServer {
         });
     }
 
+    /**
+     * Find the good extension in database from URL
+     */
     private decodeParams(): void {
         let self = this;
 
@@ -96,6 +111,9 @@ export class WebServer {
         });
     }
 
+    /**
+     * Start the server, with HTTPS if certificates are available
+     */
     private startServer(): void {
         if (fs.existsSync(path.join(__dirname, '../cert', 'chain.pem'))
             && fs.existsSync(path.join(__dirname, '../cert', 'fullchain.pem'))

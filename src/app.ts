@@ -9,6 +9,10 @@ export class App {
     private updater: Updater;
     private server: WebServer;
 
+    /**
+     * Start the application
+     * @param options
+     */
     public start(options: {[key: string]: any[]}) {
         let analytics = new Analytics();
         this.db = new Database();
@@ -19,10 +23,13 @@ export class App {
         this.cron();
     }
 
+    /**
+     * Setup a cron job to update data every X hours
+     */
     private cron() {
         let cron = require('node-cron');
         let self = this;
-        cron.schedule('0 */6 * * *', function () {
+        cron.schedule('0 */2 * * *', function () {
             self.updater.updateData();
         });
     }
