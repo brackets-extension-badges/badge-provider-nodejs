@@ -27,7 +27,7 @@ Currently available at [badges.ml](https://badges.ml/list.json)
 
 ## Finding the extension name
 
-The *name* of an extension is definded in the `package.json` file, at the root of the extension.
+The *name* of an extension is defined in the `package.json` file, at the root of the extension.
 
 ## Deployment
 
@@ -50,7 +50,7 @@ gulp
 node index
 ```
 
-The data is refreshed everytime the server starts and every 2 hours. Everything is saved in RAM, which means the data is erased when the server stops.
+The data is refreshed every time the server starts and every 2 hours. Everything is saved in RAM, which means the data is erased when the server stops.
 
 ## HTTPS support
 
@@ -67,7 +67,7 @@ Running `gulp` will achieve two things:
 - It will compile the typescript from the /src folder to javascript
 - It will compile the doT.js template
 
-You should run gulp everytime the code changes.
+You should run gulp every time the code changes.
 
 Running `gulp tslint` will validate the quality of your typescript code.
 
