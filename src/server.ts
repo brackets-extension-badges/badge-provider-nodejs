@@ -16,12 +16,12 @@ export class WebServer {
     private analytics: Analytics;
     private app: any;
     private db: Database;
-    private options: {[key: string]: any[]};
+    private env: {[key: string]: any};
 
-    constructor(options: {[key: string]: any[]}, db: Database, analytics: Analytics) {
+    constructor(env: {[key: string]: any}, db: Database, analytics: Analytics) {
         this.analytics = analytics;
         this.db = db;
-        this.options = options;
+        this.env = env;
     }
 
     /**
@@ -115,20 +115,21 @@ export class WebServer {
      * Start the server, with HTTPS if certificates are available
      */
     private startServer(): void {
-        if (fs.existsSync(path.join(__dirname, '../cert', 'chain.pem'))
-            && fs.existsSync(path.join(__dirname, '../cert', 'fullchain.pem'))
-            && fs.existsSync(path.join(__dirname, '../cert', 'privkey.pem'))
+        let certDir = this.env.certDir.toString();
+        if (fs.existsSync(path.join(certDir, 'chain.pem'))
+            && fs.existsSync(path.join(certDir, 'fullchain.pem'))
+            && fs.existsSync(path.join(certDir, 'privkey.pem'))
         ) {
             let options = {
-                ca: fs.readFileSync(path.join(__dirname, '../cert', 'chain.pem')),
-                cert: fs.readFileSync(path.join(__dirname, '../cert', 'fullchain.pem')),
-                key: fs.readFileSync(path.join(__dirname, '../cert', 'privkey.pem')),
+                ca: fs.readFileSync(path.join(certDir, 'chain.pem')),
+                cert: fs.readFileSync(path.join(certDir, 'fullchain.pem')),
+                key: fs.readFileSync(path.join(certDir, 'privkey.pem')),
             };
-            https.createServer(options, this.app).listen(this.options.https[0], this.options.https[1]);
-            console.info('Server listening on port ' + this.options.https[0] + '!');
+            https.createServer(options, this.app).listen(this.env.portHttps, this.env.hostnameHttps.toString());
+            console.info('Server listening on port ' + this.env.portHttps + '!');
         }
 
-        http.createServer(this.app).listen(this.options.http[0], this.options.http[1]);
-        console.info('Server listening on port ' + this.options.http[0] + '!');
+        http.createServer(this.app).listen(this.env.port, this.env.hostname.toString());
+        console.info('Server listening on port ' + this.env.port + '!');
     }
 }

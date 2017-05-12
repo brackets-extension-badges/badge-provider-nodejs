@@ -1,7 +1,12 @@
-const PORT = process.env.PORT || 80;
-const SSL_PORT = process.env.SSL_PORT || 443;
+var env = {
+    'port': process.env.PORT || 80,
+    'hostname': process.env.HOSTNAME || '',
+    'portHttps': process.env.PORT_HTTPS || 443,
+    'hostnameHttps': process.env.HOSTNAME_HTTPS || '',
+    'certDir': process.env.CERT_DIR || (__dirname + '/cert')
+};
 
 var App = require("./js/app");
 var app = new App.App();
-// [port, 'hostname'] | [port, '']
-app.start({http: [PORT, ''], https: [SSL_PORT, '']});
+console.log(env);
+app.start(env);

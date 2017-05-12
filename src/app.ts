@@ -11,13 +11,13 @@ export class App {
 
     /**
      * Start the application
-     * @param options
+     * @param env
      */
-    public start(options: {[key: string]: any[]}) {
+    public start(env: {[key: string]: any}) {
         let analytics = new Analytics();
         this.db = new Database();
         this.updater = new Updater(this.db);
-        this.server = new WebServer(options, this.db, analytics);
+        this.server = new WebServer(env, this.db, analytics);
         this.server.start();
         this.updater.updateData();
         this.cron();
