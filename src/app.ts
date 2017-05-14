@@ -14,7 +14,7 @@ export class App {
      * @param env
      */
     public start(env: {[key: string]: any}) {
-        let analytics = new Analytics();
+        let analytics = new Analytics(env);
         this.db = new Database();
         this.updater = new Updater(this.db);
         this.server = new WebServer(env, this.db, analytics);

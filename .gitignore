@@ -3,4 +3,3 @@ node_modules
 js/*
 views/*.js
 cert/*.pem
-analytics/tid

@@ -8,23 +8,21 @@ import uuid = require('uuid');
  */
 export class Analytics {
 
-    private activated: boolean;
     private uuid: string;
     private tid: string;
 
     /**
      * When starting, get GA tracking id and generate a new UUID
      */
-    constructor() {
+    constructor(env: any) {
         this.uuid = uuid.v4();
 
-        if (!fs.existsSync(path.join(__dirname, '../analytics', 'tid'))) {
-            this.activated = false;
+        if (typeof env.gaTrackingID === 'undefined') {
+            this.tid = '';
             return;
         }
 
-        this.tid = fs.readFileSync(path.join(__dirname, '../analytics', 'tid'), 'utf8').replace(/\s/g, '');
-        this.activated = true;
+        this.tid = env.gaTrackingID;
         console.info('Analytics activated with tid = ' + this.tid);
     }
 
@@ -34,7 +32,7 @@ export class Analytics {
      * @param method
      */
     public track(req: any, method: string = null): void {
-        if (!this.activated) {
+        if (this.tid === '') {
             return;
         }
 
@@ -44,7 +42,7 @@ export class Analytics {
             t: 'pageview',
             tid: this.tid,
             v: 1,
-        } as {[key: string]: number|string};
+        } as { [key: string]: number | string };
 
         if (method != null) {
             params['cg1'] = method;
