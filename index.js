@@ -8,5 +8,4 @@ var env = {
 
 var App = require("./js/app");
 var app = new App.App();
-console.log(env);
 app.start(env);
