@@ -38,7 +38,7 @@ export class Analytics {
 
         let params = {
             cid: this.uuid,
-            d1: req.url,
+            dp: req.url,
             t: 'pageview',
             tid: this.tid,
             v: 1,
