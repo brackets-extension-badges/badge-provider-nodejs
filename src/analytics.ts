@@ -17,7 +17,7 @@ export class Analytics {
     constructor(env: any) {
         this.uuid = uuid.v4();
 
-        if (typeof env.gaTrackingID === 'undefined') {
+        if (typeof env.gaTrackingID === 'undefined' || env.gaTrackingID === '') {
             this.tid = '';
             return;
         }
@@ -32,20 +32,20 @@ export class Analytics {
      * @param method
      */
     public track(req: any, method: string = null): void {
-        if (this.tid === '') {
+        if (this.tid === '' || typeof req.query.do_not_track !== 'undefined') {
             return;
         }
 
         let params = {
             cid: this.uuid,
-            dp: req.url,
+            d1: req.url,
             t: 'pageview',
             tid: this.tid,
             v: 1,
         } as { [key: string]: number | string };
 
         if (method != null) {
-            params['cg1'] = method;
+            params['cg1'] = 'svg/' + method;
         }
 
         let options = {
