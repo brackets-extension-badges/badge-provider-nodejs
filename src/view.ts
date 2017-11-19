@@ -1,5 +1,5 @@
 import path = require('path');
-import {BadgeUtils, DOWNLOADS_WIDTH} from './badgeUtils';
+import {BadgeUtils, DOWNLOADS_WIDTH, VERSION_WIDTH} from './badgeUtils';
 
 /**
  * Things to return at web requests
@@ -7,12 +7,12 @@ import {BadgeUtils, DOWNLOADS_WIDTH} from './badgeUtils';
 export class View {
 
     /**
-     * Get a .svg badge
+     * Get a .svg badge with the number of downloads
      * @param downloads - number to display
      * @param method
-     * @returns {any}
+     * @returns string
      */
-    public static getBadge(downloads: number, method: string): string {
+    public static getDownloadsBadge(downloads: number, method: string): string {
         let text = BadgeUtils.formatNumber(downloads);
 
         let leftWidth = DOWNLOADS_WIDTH + 10;
@@ -20,8 +20,16 @@ export class View {
 
         text += BadgeUtils.getSuffix(method);
 
-        let render = require('../views/badge');
+        let render = require('../views/downloads');
         return render({leftWidth, rightWidth, text});
+    }
+
+    public static getVersionBadge(version: string): string {
+        let leftWidth = VERSION_WIDTH + 10;
+        let rightWidth = BadgeUtils.measureTextWidth(version) + 10;
+
+        let render = require('../views/version');
+        return render({leftWidth, rightWidth, version});
     }
 
     /**

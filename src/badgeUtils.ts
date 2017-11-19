@@ -11,25 +11,27 @@ const LAST_VERSION_SUFFIX = ' latest version';
 const WEEK_SUFFIX = '/week';
 const DAY_SUFFIX = '/day';
 
-const TOTAL_WIDTH = 28.83740234375;
-const LAST_VERSION_WIDTH = 78.35888671875;
-const WEEK_WIDTH = 33.6123046875;
-const DAY_WIDTH = 24.87890625;
-export const DOWNLOADS_WIDTH = 58.37841796875;
+const TOTAL_WIDTH = 28.837;
+const LAST_VERSION_WIDTH = 78.358;
+const WEEK_WIDTH = 33.612;
+const DAY_WIDTH = 24.878;
+export const DOWNLOADS_WIDTH = 58.378;
+export const VERSION_WIDTH = 40.046;
 
 const CHAR_WIDTHS = {
-    M: 9.2705078125,
-    k: 6.509765625,
-    0: 6.9931640625,
-    1: 6.9931640625,
-    2: 6.9931640625,
-    3: 6.9931640625,
-    4: 6.9931640625,
-    5: 6.9931640625,
-    6: 6.9931640625,
-    7: 6.9931640625,
-    8: 6.9931640625,
-    9: 6.9931640625,
+    '.': 4.001,
+    '0': 6.993,
+    '1': 6.993,
+    '2': 6.993,
+    '3': 6.993,
+    '4': 6.993,
+    '5': 6.993,
+    '6': 6.993,
+    '7': 6.993,
+    '8': 6.993,
+    '9': 6.993,
+    'M': 9.270,
+    'k': 6.509,
 } as any;
 
 /**

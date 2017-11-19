@@ -46,8 +46,14 @@ export class WebServer {
             res.setHeader('Content-Type', 'image/svg+xml');
             let method = req.params['method'];
             let downloads = BadgeUtils.getDownloadsByMethod(req.extension, method);
-            res.end(View.getBadge(downloads, method));
+            res.end(View.getDownloadsBadge(downloads, method));
             self.analytics.track(req, method);
+        });
+
+        this.app.get('/:extension/version.svg', function (req: any, res: any) {
+            res.setHeader('Content-Type', 'image/svg+xml');
+            res.end(View.getVersionBadge(req.extension.version));
+            self.analytics.track(req, 'version');
         });
 
         this.app.get('/:extension/stats.json', function (req: any, res: any) {

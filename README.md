@@ -19,6 +19,7 @@ Currently available at [badges.ml](https://badges.ml/list.json)
 ## Routes
 
 - `/` - Redirects to [brackets-extension-badges.github.io](https://brackets-extension-badges.github.io)
+- `/EXTENSION_NAME/version.svg` - A badge showing the version number
 - `/EXTENSION_NAME/total.svg` - A badge showing the total number of downloads
 - `/EXTENSION_NAME/last-version.svg` - A badge showing number of downloads for the latest version of the extension
 - `/EXTENSION_NAME/week.svg` - A badge showing the number of downloads during the last 7 days

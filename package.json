@@ -1,7 +1,7 @@
 {
   "name": "badge-provider",
   "description": "Badge provider for brackets extensions",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Boris K",
   "dependencies": {
     "@types/compression": "0.0.33",
