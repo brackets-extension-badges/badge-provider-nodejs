@@ -2,9 +2,10 @@ import Lowdb = require('lowdb');
 
 export interface Extension {
     name: string;
-    totalDownloads: number;
-    lastVersionDownloads: number;
-    weekDownloads: number;
+    total: number;
+    lastVersion: number;
+    version: string;
+    week: number;
 }
 
 /**
@@ -38,9 +39,10 @@ export class Database {
         }
 
         dbExtension.assign({
-            lastVersionDownloads: e.lastVersionDownloads,
-            totalDownloads: e.totalDownloads,
-            weekDownloads: e.weekDownloads,
+            lastVersion: e.lastVersion,
+            total: e.total,
+            version: e.version,
+            week: e.week,
         }).write();
     }
 

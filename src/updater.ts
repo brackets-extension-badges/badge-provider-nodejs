@@ -36,7 +36,7 @@ export class Updater {
                         extension = self.hydrate(results[i]);
                         // Upsert in DB
                         self.db.upsert(extension);
-                        list[extension.name] = extension.totalDownloads;
+                        list[extension.name] = extension.total;
                     }
                 }
             }
@@ -87,23 +87,24 @@ export class Updater {
     /**
      * Cast a result (undefined type) into an Extension
      * @param result
-     * @returns {{lastVersionDownloads: number, name, totalDownloads: number, weekDownloads: number}}
+     * @returns {{lastVersion: number, name, total: number, week: number}}
      */
     private hydrate(result: any): Extension {
         let e = {
-            lastVersionDownloads: 0,
+            lastVersion: 0,
             name: result.metadata.name,
-            totalDownloads: 0,
-            weekDownloads: 0,
+            total: 0,
+            version: '',
+            week: 0,
         };
-        e.totalDownloads = result.totalDownloads;
+        e.total = result.totalDownloads;
 
         if (result.versions && result.versions[result.versions.length - 1].downloads) {
-            e.lastVersionDownloads = result.versions[result.versions.length - 1].downloads;
+            e.lastVersion = result.versions[result.versions.length - 1].downloads;
+            e.version = result.versions[result.versions.length - 1].version;
         }
 
-        e.weekDownloads = this.getWeekDownloads(result.recent);
-
+        e.week = this.getWeekDownloads(result.recent);
         return e;
     }
 

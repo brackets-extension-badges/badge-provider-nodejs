@@ -124,16 +124,16 @@ export class BadgeUtils {
         let downloads: number;
         switch (method) {
             case TOTAL:
-                downloads = e.totalDownloads;
+                downloads = e.total;
                 break;
             case LAST_VERSION:
-                downloads = e.lastVersionDownloads;
+                downloads = e.lastVersion;
                 break;
             case WEEK:
-                downloads = e.weekDownloads;
+                downloads = e.week;
                 break;
             case DAY:
-                downloads = e.weekDownloads / 7;
+                downloads = e.week / 7;
                 break;
             default:
                 downloads = 0;

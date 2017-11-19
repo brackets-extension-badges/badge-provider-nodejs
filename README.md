@@ -50,7 +50,7 @@ gulp
 npm start
 ```
 
-The data is refreshed every time the server starts and every 2 hours. Everything is saved in RAM, which means the data is erased when the server stops.
+The data is refreshed every time the server starts and every 2 hours. Everything is saved in `db.json`, so make sure you have write access.
 
 ## HTTPS support
 

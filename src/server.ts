@@ -56,9 +56,10 @@ export class WebServer {
             res.json({
                 /* tslint:disable */
                 name: e.name,
-                total: e.totalDownloads,
-                lastVersion: e.lastVersionDownloads,
-                week: e.weekDownloads,
+                version: e.version,
+                total: e.total,
+                lastVersion: e.lastVersion,
+                week: e.week,
                 /* tslint:enable */
             }).end();
             self.analytics.track(req, 'stats');
