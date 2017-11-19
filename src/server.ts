@@ -16,9 +16,9 @@ export class WebServer {
     private analytics: Analytics;
     private app: any;
     private db: Database;
-    private env: {[key: string]: any};
+    private env: { [key: string]: any };
 
-    constructor(env: {[key: string]: any}, db: Database, analytics: Analytics) {
+    constructor(env: { [key: string]: any }, db: Database, analytics: Analytics) {
         this.analytics = analytics;
         this.db = db;
         this.env = env;
@@ -53,14 +53,14 @@ export class WebServer {
         this.app.get('/:extension/stats.json', function (req: any, res: any) {
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             let e = req.extension;
-            res.end(JSON.stringify({
+            res.json({
                 /* tslint:disable */
                 name: e.name,
                 total: e.totalDownloads,
                 lastVersion: e.lastVersionDownloads,
                 week: e.weekDownloads,
                 /* tslint:enable */
-            }));
+            }).end();
             self.analytics.track(req, 'stats');
         });
 
@@ -105,7 +105,7 @@ export class WebServer {
 
         this.app.param('extension', function (req: any, res: any, next: any, extensionName: string) {
             let e = self.db.get(extensionName);
-            if (e == null) {
+            if (!e) {
                 return View.unknownBadge(res);
             }
             req.extension = e;

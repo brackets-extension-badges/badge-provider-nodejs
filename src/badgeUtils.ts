@@ -48,7 +48,7 @@ export class BadgeUtils {
         let width = 0;
 
         for (let i of chars) {
-            if (typeof CHAR_WIDTHS[i] != null) {
+            if (CHAR_WIDTHS[i]) {
                 width += CHAR_WIDTHS[i];
             }
         }

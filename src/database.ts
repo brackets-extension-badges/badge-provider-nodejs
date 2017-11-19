@@ -1,4 +1,4 @@
-import Loki = require('lokijs');
+import Lowdb = require('lowdb');
 
 export interface Extension {
     name: string;
@@ -11,67 +11,51 @@ export interface Extension {
  * Database management
  */
 export class Database {
-    private db: Loki;
-    private extensions: LokiCollection<any>;
+    private db: Lowdb;
+    private extensions: () => Lowdb.LoDashWrapper<any>;
 
     constructor() {
-        this.db = new Loki('extensions.db');
-        this.extensions = this.db.addCollection('extensions', {
-            unique: ['name'],
-        });
+        const low = require('lowdb');
+        const FileSync = require('lowdb/adapters/FileSync');
+        const adapter = new FileSync('db.json');
+
+        this.db = low(adapter);
+
+        this.db.defaults({extensions: [], list: {}}).write();
+        this.extensions = () => this.db.get('extensions');
+
         console.info('Database created');
     }
 
     /**
      * Upsert an extension, i.e update or insert
-     * @param e
      */
     public upsert(e: Extension): void {
-        let n = this.extensions.by('name', e.name);
+        let dbExtension = this.extensions().find({name: e.name});
 
-        if (n == null) {
-            // Insert
-            this.extensions.insert({
-                lastVersionDownloads: e.lastVersionDownloads,
-                name: e.name,
-                totalDownloads: e.totalDownloads,
-                weekDownloads: e.weekDownloads,
-            });
-            return;
+        if (!dbExtension.value()) {
+            return this.extensions().push(e).write();
         }
 
-        // Update
-        n.totalDownloads = e.totalDownloads;
-        n.weekDownloads = e.weekDownloads;
-        n.lastVersionDownloads = e.lastVersionDownloads;
-        this.extensions.update(n);
+        dbExtension.assign({
+            lastVersionDownloads: e.lastVersionDownloads,
+            totalDownloads: e.totalDownloads,
+            weekDownloads: e.weekDownloads,
+        }).write();
     }
 
     /**
      * Get an extension by name
-     * @param name
-     * @returns {any|((value:any)=>any)}
      */
     public get(name: string): Extension {
-        return this.extensions.by('name', name);
+        return this.extensions().find({name}).value();
     }
 
-    public getExtensionList(): string {
-        let l = this.extensions.by('name', 'EXTENSION LIST');
-        if (l == null) {
-            return '{}';
-        }
-        return this.extensions.by('name', 'EXTENSION LIST').list;
+    public getExtensionList(): any {
+        return this.db.get('list').value();
     }
 
-    public saveExtensionList(list: string): string {
-        let n = this.extensions.by('name', 'EXTENSION LIST');
-        if (n == null) {
-            this.extensions.insert({list, name: 'EXTENSION LIST'});
-            return;
-        }
-
-        n.list = list;
-        this.extensions.update(n);
+    public saveExtensionList(list: { [key: string]: number }): void {
+        this.db.set('list', list).write();
     }
 }

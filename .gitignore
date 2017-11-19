@@ -1,5 +1,10 @@
 .idea/*
 node_modules
+
 js/*
 views/*.js
+
 cert/*.pem
+db.json
+
+package-lock.json

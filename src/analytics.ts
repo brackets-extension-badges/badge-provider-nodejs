@@ -1,5 +1,3 @@
-import fs = require('fs');
-import path = require('path');
 import request = require('request');
 import uuid = require('uuid');
 
@@ -17,7 +15,7 @@ export class Analytics {
     constructor(env: any) {
         this.uuid = uuid.v4();
 
-        if (typeof env.gaTrackingID === 'undefined' || env.gaTrackingID === '') {
+        if (!env.gaTrackingID) {
             this.tid = '';
             return;
         }
@@ -44,7 +42,7 @@ export class Analytics {
             v: 1,
         } as { [key: string]: number | string };
 
-        if (method != null) {
+        if (method) {
             params['cg1'] = 'svg/' + method;
         }
 
@@ -56,8 +54,8 @@ export class Analytics {
             url: 'https://www.google-analytics.com/collect',
         };
 
-        request.post(options, function (error, response, body) {
-            if (error != null) {
+        request.post(options, function (error: any) {
+            if (error) {
                 console.error('HTTPS Post error: ' + error);
             }
         });

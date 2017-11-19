@@ -47,7 +47,7 @@ npm install -g gulp
 gulp
 
 # Run the badge provider
-node index
+npm start
 ```
 
 The data is refreshed every time the server starts and every 2 hours. Everything is saved in RAM, which means the data is erased when the server stops.

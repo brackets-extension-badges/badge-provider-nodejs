@@ -13,7 +13,7 @@ export class App {
      * Start the application
      * @param env
      */
-    public start(env: {[key: string]: any}) {
+    public start(env: { [key: string]: any }) {
         let analytics = new Analytics(env);
         this.db = new Database();
         this.updater = new Updater(this.db);
