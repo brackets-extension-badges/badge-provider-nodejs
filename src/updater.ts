@@ -1,6 +1,6 @@
+import dateFormat = require('dateformat');
 import http = require('http');
 import https = require('https');
-import dateFormat = require('dateformat');
 import {Database, Extension} from './database';
 
 const host = 'brackets-registry.aboutweb.com';
