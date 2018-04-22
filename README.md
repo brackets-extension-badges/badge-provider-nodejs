@@ -2,7 +2,7 @@
 
 # Node.js badge provider
 
-![brackets-extension-badges](https://cloud.githubusercontent.com/assets/17952318/24578041/b908d05e-16d8-11e7-9152-47b66656ee0e.gif)
+![brackets-extension-badges](https://user-images.githubusercontent.com/17952318/33060113-6fa50e88-ce97-11e7-9694-e282b634ce9b.png)
 
 ---
 
@@ -43,9 +43,8 @@ git clone https://github.com/brackets-extension-badges/badge-provider-nodejs && 
 # Install dependencies
 npm install
 
-# Install and run Gulp
-npm install -g gulp
-gulp
+# Build the project
+npm run build
 
 # Run the badge provider
 npm start
@@ -70,13 +69,13 @@ Just restart the server, and the provider will listen to both the ports 80 and 4
 
 The server's behaviour can be customized by setting the environment variables used in `index.js`, such as ports, hostnames, or certificates location.
 
-## Gulp
+## Building
 
-Running `gulp` will achieve two things:
+Running `npm run build` will achieve two things:
 - It will compile the typescript from the /src folder to javascript
 - It will compile the doT.js template
 
-You should run gulp every time the code changes.
+You should build every time the code changes.
 
-Running `gulp tslint` will validate the quality of your typescript code.
+Running `npm test` will validate the quality of your typescript code.
 

@@ -7,4 +7,3 @@ views/*.js
 cert/*.pem
 db.json
 
-package-lock.json
