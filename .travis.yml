@@ -2,8 +2,12 @@ language: node_js
 node_js:
   - "node"
 
-before_script:
-  - npm install
-  - npm install -g gulp
+script:
+- npm run build
+- npm run test
 
-script: gulp all
+deploy:
+  provider: heroku
+  api_key:
+    secure: $HEROKU_API_KEY
+  app: brackets-extension-badges
