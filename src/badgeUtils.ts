@@ -6,15 +6,6 @@ export const LAST_VERSION = 'last-version';
 export const WEEK = 'week';
 export const DAY = 'day';
 
-const TOTAL_SUFFIX = ' total';
-const LAST_VERSION_SUFFIX = ' latest version';
-const WEEK_SUFFIX = '/week';
-const DAY_SUFFIX = '/day';
-
-const TOTAL_WIDTH = 28.837;
-const LAST_VERSION_WIDTH = 78.358;
-const WEEK_WIDTH = 33.612;
-const DAY_WIDTH = 24.878;
 export const DOWNLOADS_WIDTH = 58.378;
 export const VERSION_WIDTH = 40.046;
 
@@ -64,16 +55,13 @@ export class BadgeUtils {
      * @returns {string}
      */
     public static formatNumber(unFormatted: number): string {
-        let formatted: string;
         if (unFormatted < 10000) {
-            formatted = numeral(unFormatted).format('0');
-        } else if (unFormatted < 10000000) {
-            formatted = numeral(unFormatted / 1000).format('0') + 'k';
-        } else {
-            formatted = numeral(unFormatted / 1000000).format('0') + 'M';
-
+            return numeral(unFormatted).format('0');
         }
-        return formatted;
+        if (unFormatted < 1000000) {
+            return numeral(unFormatted / 1000).format('0') + 'k';
+        }
+        return numeral(unFormatted / 1000000).format(unFormatted < 10000000 ? '0.0' : '0') + 'M';
     }
 
     /**
@@ -82,18 +70,13 @@ export class BadgeUtils {
      * @returns {string}
      */
     public static getSuffix(method: string): string {
-        switch (method) {
-            case TOTAL:
-                return TOTAL_SUFFIX;
-            case LAST_VERSION:
-                return LAST_VERSION_SUFFIX;
-            case WEEK:
-                return WEEK_SUFFIX;
-            case DAY:
-                return DAY_SUFFIX;
-            default:
-                return '';
-        }
+        const suffixes: {[key: string]: string} = {
+            'total': ' total',
+            'last-version': ' latest version',
+            'week': '/week',
+            'day': '/day',
+        };
+        return suffixes[method] ? suffixes[method] : ''
     }
 
     /**
@@ -102,18 +85,13 @@ export class BadgeUtils {
      * @returns {number}
      */
     public static getSuffixWidth(method: string): number {
-        switch (method) {
-            case TOTAL:
-                return TOTAL_WIDTH;
-            case LAST_VERSION:
-                return LAST_VERSION_WIDTH;
-            case WEEK:
-                return WEEK_WIDTH;
-            case DAY:
-                return DAY_WIDTH;
-            default:
-                return 0;
-        }
+        const widths: {[key: string]: number} = {
+            'total': 28.837,
+            'last-version': 78.358,
+            'week': 33.612,
+            'day': 24.878,
+        };
+        return widths[method] ? widths[method] : 0
     }
 
     /**
@@ -123,24 +101,17 @@ export class BadgeUtils {
      * @returns {number}
      */
     public static getDownloadsByMethod(e: Extension, method: string): number {
-        let downloads: number;
         switch (method) {
             case TOTAL:
-                downloads = e.total;
-                break;
+                return e.total;
             case LAST_VERSION:
-                downloads = e.lastVersion;
-                break;
+                return e.lastVersion;
             case WEEK:
-                downloads = e.week;
-                break;
+                return e.week;
             case DAY:
-                downloads = e.week / 7;
-                break;
+                return e.week / 7;
             default:
-                downloads = 0;
+                return 0;
         }
-
-        return downloads;
     }
 }
