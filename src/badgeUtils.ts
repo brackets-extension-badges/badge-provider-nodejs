@@ -76,7 +76,7 @@ export class BadgeUtils {
             'week': '/week',
             'day': '/day',
         };
-        return suffixes[method] ? suffixes[method] : ''
+        return suffixes[method] ? suffixes[method] : '';
     }
 
     /**
@@ -91,7 +91,7 @@ export class BadgeUtils {
             'week': 33.612,
             'day': 24.878,
         };
-        return widths[method] ? widths[method] : 0
+        return widths[method] ? widths[method] : 0;
     }
 
     /**
