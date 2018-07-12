@@ -46,8 +46,8 @@ export class View {
      * @param res
      * @param list
      */
-    public static extensionList(res: any, list: { [key: string]: number }): void {
+    public static extensionList(res: any, list: string): void {
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
-        res.json(list);
+        res.end(list);
     }
 }

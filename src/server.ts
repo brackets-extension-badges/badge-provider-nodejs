@@ -56,7 +56,7 @@ export class WebServer {
         this.app.get('/:extension/stats.json', function (req: any, res: any) {
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             let e = req.extension;
-            res.json({
+            res.end(JSON.stringify({
                 /* tslint:disable */
                 name: e.name,
                 version: e.version,
@@ -64,7 +64,7 @@ export class WebServer {
                 lastVersion: e.lastVersion,
                 week: e.week,
                 /* tslint:enable */
-            }).end();
+            }));
             self.analytics.track(req, 'stats');
         });
 
