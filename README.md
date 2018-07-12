@@ -46,28 +46,14 @@ npm install
 # Build the project
 npm run build
 
+# Choose a port (default to 80)
+export PORT=80
+
 # Run the badge provider
 npm start
 ```
 
 The data is refreshed every time the server starts and every 2 hours. Everything is saved in `db.json`, so make sure you have write access.
-
-## HTTPS support
-
-Once you have generated a SSL certificate, you can enable HTTPS with one of the following methods:
-
-Method 1: use the the `CERT_DIR` environment variable to define the certificates location
-
-Method 2: Copy the following files into the `/cert` directory:
-- chain.pem
-- fullchain.pem
-- privkey.pem
-
-Just restart the server, and the provider will listen to both the ports 80 and 443.
-
-## Environment
-
-The server's behaviour can be customized by setting the environment variables used in `index.js`, such as ports, hostnames, or certificates location.
 
 ## Building
 

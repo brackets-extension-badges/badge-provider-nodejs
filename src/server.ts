@@ -1,9 +1,6 @@
 import compression = require('compression');
 import express = require('express');
-import fs = require('fs');
 import http = require('http');
-import https = require('https');
-import path = require('path');
 import {Analytics} from './analytics';
 import {BadgeUtils} from './badgeUtils';
 import {Database} from './database';
@@ -121,24 +118,11 @@ export class WebServer {
     }
 
     /**
-     * Start the server, with HTTPS if certificates are available
+     * Start the server
      */
     private startServer(): void {
-        let certDir = this.env.certDir.toString();
-        if (fs.existsSync(path.join(certDir, 'chain.pem'))
-            && fs.existsSync(path.join(certDir, 'fullchain.pem'))
-            && fs.existsSync(path.join(certDir, 'privkey.pem'))
-        ) {
-            let options = {
-                ca: fs.readFileSync(path.join(certDir, 'chain.pem')),
-                cert: fs.readFileSync(path.join(certDir, 'fullchain.pem')),
-                key: fs.readFileSync(path.join(certDir, 'privkey.pem')),
-            };
-            https.createServer(options, this.app).listen(this.env.portHttps, this.env.hostnameHttps.toString());
-            console.info('Server listening on port ' + this.env.portHttps + '!');
-        }
-
-        http.createServer(this.app).listen(this.env.port, this.env.hostname.toString());
-        console.info('Server listening on port ' + this.env.port + '!');
+        http.createServer(this.app).listen(this.env.port, () => {
+            console.info('Server listening on port ' + this.env.port + '!');
+        });
     }
 }

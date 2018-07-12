@@ -5,9 +5,3 @@ node_js:
 script:
 - npm run build
 - npm run test
-
-deploy:
-  provider: heroku
-  api_key:
-    secure: $HEROKU_API_KEY
-  app: brackets-extension-badges
