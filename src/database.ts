@@ -36,6 +36,7 @@ export class Database {
                 name: e.name,
                 total: e.total,
                 week: e.week,
+                version: e.version,
             });
             return;
         }
@@ -44,6 +45,7 @@ export class Database {
         dbExtension.total = e.total;
         dbExtension.week = e.week;
         dbExtension.lastVersion = e.lastVersion;
+        dbExtension.version = e.version;
         this.extensions.update(dbExtension);
     }
 
