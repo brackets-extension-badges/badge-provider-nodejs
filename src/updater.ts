@@ -40,7 +40,7 @@ export class Updater {
                     }
                 }
             }
-            self.db.saveExtensionList(list);
+            self.db.saveExtensionList(JSON.stringify(list));
             console.info('Data updated :  ' + results.length + ' rows');
         });
     }

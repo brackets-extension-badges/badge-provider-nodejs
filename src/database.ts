@@ -1,4 +1,4 @@
-import Lowdb = require('lowdb');
+import Loki = require('lokijs');
 
 export interface Extension {
     name: string;
@@ -12,19 +12,14 @@ export interface Extension {
  * Database management
  */
 export class Database {
-    private db: Lowdb;
-    private extensions: () => Lowdb.LoDashWrapper<any>;
+    private db: Loki;
+    private extensions: Collection<any>;
 
     constructor() {
-        const low = require('lowdb');
-        const FileSync = require('lowdb/adapters/FileSync');
-        const adapter = new FileSync('db.json');
-
-        this.db = low(adapter);
-
-        this.db.defaults({extensions: [], list: {}}).write();
-        this.extensions = () => this.db.get('extensions');
-
+        this.db = new Loki('extensions.db');
+        this.extensions = this.db.addCollection('extensions', {
+            unique: ['name'],
+        });
         console.info('Database created');
     }
 
@@ -32,32 +27,47 @@ export class Database {
      * Upsert an extension, i.e update or insert
      */
     public upsert(e: Extension): void {
-        let dbExtension = this.extensions().find({name: e.name});
+        let dbExtension = this.extensions.by('name', e.name);
 
-        if (!dbExtension.value()) {
-            return this.extensions().push(e).write();
+        if (!dbExtension) {
+            // Insert
+            this.extensions.insert({
+                lastVersion: e.lastVersion,
+                name: e.name,
+                total: e.total,
+                week: e.week,
+                version: e.version,
+            });
+            return;
         }
 
-        dbExtension.assign({
-            lastVersion: e.lastVersion,
-            total: e.total,
-            version: e.version,
-            week: e.week,
-        }).write();
+        // Update
+        dbExtension.total = e.total;
+        dbExtension.week = e.week;
+        dbExtension.lastVersion = e.lastVersion;
+        dbExtension.version = e.version;
+        this.extensions.update(dbExtension);
     }
 
     /**
      * Get an extension by name
      */
     public get(name: string): Extension {
-        return this.extensions().find({name}).value();
+        return this.extensions.by('name', name);
     }
 
     public getExtensionList(): any {
-        return this.db.get('list').value();
+        let l = this.extensions.by('name', 'EXTENSION LIST');
+        return l ? l.list : '{}';
     }
 
-    public saveExtensionList(list: { [key: string]: number }): void {
-        this.db.set('list', list).write();
+    public saveExtensionList(list: string): string {
+        let n = this.extensions.by('name', 'EXTENSION LIST');
+        if (n == null) {
+            this.extensions.insert({list, name: 'EXTENSION LIST'});
+            return;
+        }
+        n.list = list;
+        this.extensions.update(n);
     }
 }
