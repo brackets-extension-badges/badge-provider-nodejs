@@ -21,7 +21,7 @@ export class Analytics {
         }
 
         this.tid = env.gaTrackingID;
-        console.info('Analytics activated with tid = ' + this.tid);
+        console.info('Analytics enabled');
     }
 
     /**
