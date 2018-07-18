@@ -1,20 +1,23 @@
-[![Build Status](https://travis-ci.org/brackets-extension-badges/badge-provider-nodejs.svg?branch=master)](https://travis-ci.org/brackets-extension-badges/badge-provider-nodejs)
 
-# Node.js badge provider
+# Badge provider
 
-![brackets-extension-badges](https://user-images.githubusercontent.com/17952318/33060113-6fa50e88-ce97-11e7-9694-e282b634ce9b.png)
+[![Build Status](https://img.shields.io/travis/brackets-extension-badges/badge-provider-nodejs.svg?branch=master&style=flat-square)](https://travis-ci.org/brackets-extension-badges/badge-provider-nodejs)
+[![License](https://img.shields.io/badge/license-Apache_2.0-f49068.svg?style=flat-square)](https://raw.githubusercontent.com/bokub/git-history-editor/master/LICENSE)
 
----
+> The back-end service powering [brackets-extension-badges.github.io](https://brackets-extension-badges.github.io)
 
-## [<p align="center">brackets-extension-badges.github.io</p>](https://brackets-extension-badges.github.io)
+[![brackets-extension-badges](https://user-images.githubusercontent.com/17952318/33060113-6fa50e88-ce97-11e7-9694-e282b634ce9b.png)](https://brackets-extension-badges.github.io)
 
----
 
-**Brackets extension badges** are download counters for your [Brackets](https://github.com/adobe/brackets) extensions, as Adobe doesn't provide any official way to retrieve statistics, even for your own extension.
+**Brackets extension badges** are download counters for your [Brackets](https://github.com/adobe/brackets) extensions
 
-This repository is the Node.js version of the server, which manages both statistics databases and `.svg` badge generation.
+This repository is the node.js version of the server, which manages both statistics databases and `.svg` badge generation.
 
-Currently available at [badges.ml](https://badges.ml/list.json)
+Currently deployed at [badges.ml](https://badges.ml/list.json) using [▲now](http://zeit.co/now)
+
+## Finding an extension name
+
+The **name** of an extension is defined in the `package.json` file, at the root of the extension.
 
 ## Routes
 
@@ -26,22 +29,18 @@ Currently available at [badges.ml](https://badges.ml/list.json)
 - `/EXTENSION_NAME/day.svg` - A badge showing the average downloads per day, based on the last 7 days
 - `/list.json` - A list of all extensions with total download numbers.
 
-## Finding the extension name
-
-The *name* of an extension is defined in the `package.json` file, at the root of the extension.
-
 ## Deployment
 
 The badge provider is very light, and doesn't need any third-party database. 
 
-Deploying it is super fast and easy, you just need `git` and `Node.js`:
+Deploying it is super fast and easy, you just need `git` and `node.js`:
 
 ```sh
 # Clone the project
 git clone https://github.com/brackets-extension-badges/badge-provider-nodejs && cd badge-provider-nodejs
 
 # Install dependencies
-npm install
+npm i
 
 # Build the project
 npm run build
@@ -53,7 +52,8 @@ export PORT=80
 npm start
 ```
 
-The data is refreshed every time the server starts and every 2 hours. Everything is saved in `db.json`, so make sure you have write access.
+The data is refreshed every time the server starts and every 2 hours. Everything is saved in RAM, which means the data
+is erased when the server stops.
 
 ## Building
 
@@ -65,3 +65,6 @@ You should build every time the code changes.
 
 Running `npm test` will validate the quality of your typescript code.
 
+## License
+
+Apache-2.0 © [Boris K](https://github.com/bokub)
